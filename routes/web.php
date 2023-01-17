@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,3 +17,11 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+// Atribuindo o middleware Auth diretamente pelas rotas
+// Route::resource('tarefa', App\Http\Controllers\TarefaController::class)->middleware('auth');
+Route::resource('tarefa', App\Http\Controllers\TarefaController::class);
