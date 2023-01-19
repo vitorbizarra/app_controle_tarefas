@@ -27,6 +27,9 @@ Auth::routes(['verify' => true]);
 
 // Atribuindo o middleware Auth diretamente pelas rotas
 // Route::resource('tarefa', App\Http\Controllers\TarefaController::class)->middleware('auth');
+
+Route::get('tarefa/exportacao/{ext}', [App\Http\Controllers\TarefaController::class, 'exportacao'])->name('tarefa.exportacao');
+
 Route::resource('tarefa', App\Http\Controllers\TarefaController::class)->middleware('verified');
 
 Route::get('/mensagem-teste', function () {
