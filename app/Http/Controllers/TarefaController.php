@@ -5,10 +5,12 @@ namespace App\Http\Controllers;
 use App\Exports\TarefasExport;
 use App\Mail\NovaTarefaMail;
 use App\Models\Tarefa;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Maatwebsite\Excel\Facades\Excel;
+use Barryvdh\DomPDF\Facade\Pdf as PDF;
 
 class TarefaController extends Controller
 {
@@ -176,5 +178,18 @@ class TarefaController extends Controller
         $file_name .= '.' . $ext;
 
         return Excel::download(new TarefasExport, $file_name);
+    }
+
+    public function exportar()
+    {
+        $tarefas = (User::find(auth()->user()->id))->tarefas()->get();
+        $pdf = PDF::loadView('tarefa.pdf', ['tarefas' => $tarefas]);
+
+        $pdf->setPaper('a4', 'portrait');
+        // tipo de papel: a4, letter, [...]
+        // orientacao: landscape (paisagem), portrait (retrato)
+
+        // return $pdf->download('lista_de_tarefas.pdf');
+        return $pdf->stream('lista_de_tarefas.pdf');
     }
 }
